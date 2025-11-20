@@ -6,18 +6,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Juego {
-    public static void main(String[] args) {
-        ArrayList <Jugador> jugadores = new ArrayList<>();
-        jugadores.add(new Jugador("Tomas"));
-        jugadores.add(new Jugador("Pablo"));
-        jugadores.add(new Jugador("Nahuel"));
-        jugadores.add(new Jugador("Bautista"));
-        jugadores.add(new Jugador("Santiago"));
-        jugadores.add(new Jugador("Valentin"));
-        jugadores.add(new Jugador("Jorge"));
-        jugadores.add(new Jugador("Jose"));
-        jugadores.add(new Jugador("Candela"));
 
+    private final Tablero tablero = new Tablero();
+    private ArrayList<Jugador> jugadores = new ArrayList<>();
+    private ArrayList<Carta> mazo = new ArrayList<>();
+
+    public Juego (ArrayList <Jugador> jugadores){
+        this.jugadores = jugadores;
+        setRoles();
+        mazo.addAll(crearCartaTunel());
+        mazo.addAll(crearCartaAccion());
+        Collections.shuffle(mazo);
+        repartirCartas();
+    }
+
+    public void setRoles (){
         int cantSabo = switch (jugadores.size()) {
             case 3, 4 -> 1;
             case 5, 6 -> 2;
@@ -36,34 +39,9 @@ public class Juego {
             }
         }
         Collections.shuffle(mineros);
-        for (Carta c:mineros){
-            System.out.println(c.mostrar());
-        }
         for (Jugador j:jugadores){
             j.setTipo(mineros.removeFirst());
-
-            System.out.println("Jugador: " + j.getNombre() + (" ") + j.mostrarTipo());
         }
-        CartaAccion romperCarro = new CartaAccionRomper("Romper Carro", "carro");
-        CartaAccion arreglarCarro = new CartaAccionArreglar("Arreglar Carro", "carro");
-        CartaAccion romperLuz = new CartaAccionRomper("Romper Luz", "luz");
-        CartaAccion arreglarLuz = new CartaAccionArreglar("Arreglar Luz", "luz");
-        CartaAccion romperPico = new CartaAccionRomper("Romper Pico", "pico");
-        CartaAccion arreglarPico = new CartaAccionArreglar("Arreglar Pico", "pico");
-
-        jugadores.getFirst().estadoHerramientas();
-        romperCarro.usar(jugadores.getFirst());
-        jugadores.getFirst().estadoHerramientas();
-        arreglarCarro.usar(jugadores.getFirst());
-        jugadores.getFirst().estadoHerramientas();
-
-        Tablero tablero = new Tablero();
-        tablero.mostrarTablero();
-        CartaTunel carta1 = (new CartaTunel(false,false,false, true, true));
-        CartaTunel carta2 = (new CartaTunel(false,true,false, true, true));
-        tablero.ponerCarta(carta1,1,2);
-        tablero.ponerCarta(carta2,2,2);
-        tablero.mostrarTablero();
     }
 
     public ArrayList<Carta> crearCartaTunel (){
@@ -100,10 +78,52 @@ public class Juego {
         for (int i = 0; i < 6; i++) {
             cartasTunel.add(new CartaTunel(true, true, true, true, true));
         }
-
-        Collections.shuffle(cartasTunel);
         return cartasTunel;
     }
 
+    public ArrayList <Carta> crearCartaAccion (){
+        ArrayList <Carta> cartas = new ArrayList<>();
+        for (int i = 0; i < 3; i ++){
+            cartas.add(new CartaAccionRomper("", "pico"));
+            cartas.add(new CartaAccionRomper("", "carro"));
+            cartas.add(new CartaAccionRomper("", "lampara"));
+            cartas.add(new CartaAccionArreglar("", "pico"));
+            cartas.add(new CartaAccionArreglar("", "carro"));
+            cartas.add(new CartaAccionArreglar("", "lampara"));
+            cartas.add(new CartaAccionDerrumbe(""));
+        }
+        for (int i = 0; i < 6; i ++){
+            cartas.add(new CartaAccionMapa(""));
+        }
+        return cartas;
+    }
 
+    public void repartirCartas (){
+        int cantCartas = switch (jugadores.size()) {
+            case 3, 4, 5 -> 6;
+            case 6, 7 -> 5;
+            case 8, 9, 10 -> 4;
+            default -> throw new RuntimeException("No puede haber menos de 3 o más de 10 jugadores");
+        };
+        ArrayList <Carta> cartasj = new ArrayList<>();
+        for (Jugador j : jugadores){
+            cartasj.clear();
+            for (int i=0; i<cantCartas; i++){
+                cartasj.add(mazo.removeFirst());
+            }
+            j.darCartas(cartasj);
+        }
+    }
+
+    public boolean puedeJugarTunel (Carta c, int fila, int col){
+        return tablero.evaluarCartaTunel(c, fila, col);
+    }
+
+    public void jugarCartaTunel (Carta c, int fila, int col){
+        tablero.ponerCarta(c, fila, col);
+    }
+
+    public void mostrarTablero (){
+        tablero.mostrarTablero();
+    }
 }

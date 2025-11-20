@@ -87,7 +87,5 @@ public class Tablero {
         tablero[fila][col] = null;
         return true;
     }
-
-
 }
 

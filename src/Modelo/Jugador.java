@@ -1,22 +1,28 @@
 package Modelo;
 
 import Modelo.Cartas.Carta;
+import Modelo.Cartas.CartaAccion;
+import Modelo.Cartas.CartaTunel;
 
 import java.util.ArrayList;
 
 public class Jugador {
+    private Juego juego;
     private String nombre;
     private Carta tipo;
     private Boolean pico;
     private Boolean luz;
     private Boolean carro;
+    private int puntos;
     private ArrayList <Carta> cartas = new ArrayList();
 
-    public Jugador (String nombre){
+    public Jugador (String nombre, Juego juego){
         this.nombre = nombre;
         this.pico = true;
         this.luz = true;
         this.carro = true;
+        this.puntos = 0;
+        this.juego = juego;
     }
 
     public void setTipo(Carta tipo){
@@ -71,5 +77,22 @@ public class Jugador {
         else {
             System.out.println("Luz dañada");
         }
+    }
+
+    public void darCartas (ArrayList <Carta> cartasJugador){
+        cartas.addAll(cartasJugador);
+    }
+
+    public boolean jugarCartaTunel (int indice, int fila, int col){
+        Carta c = cartas.get(indice);
+        if (!(c instanceof CartaTunel)){
+            return false;
+        }
+        if (juego.puedeJugarTunel(c, fila, col)){
+            cartas.remove(c);
+            juego.jugarCartaTunel(c, fila, col);
+            return true;
+        }
+        return false;
     }
 }
