@@ -6,3 +6,4 @@
 - Reparticion de puntos al final.
 - GUI
 - Revisar carta acción como abstracta
+- 
