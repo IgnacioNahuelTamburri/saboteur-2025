@@ -30,7 +30,15 @@ public class Controlador {
         return juego.getJugadores();
     }
 
+    public void iniciarJuego (){
+        juego.iniciarJuego();
+    }
+
     public ArrayList<String> getCartasJugador (String nombre){
         return juego.getCartasJugador(nombre);
+    }
+
+    public String getRolJugador (String nombre){
+        return juego.getRolJugador(nombre);
     }
 }

@@ -8,6 +8,7 @@ public class VistaConsola {
 
     private Controlador controlador;
     private Scanner scanner = new Scanner(System.in);
+    private String nombre;
 
     public VistaConsola (Controlador controlador){
         this.controlador = controlador;
@@ -64,7 +65,7 @@ public class VistaConsola {
             System.out.println("El nombre no puede estar vacío.");
             return;
         }
-
+        this.nombre = nombre;
         controlador.agregarJugador(nombre);
         System.out.println("Jugador '" + nombre + "' creado correctamente.");
     }
@@ -74,9 +75,9 @@ public class VistaConsola {
             System.out.println("Debe crear al menos un jugador antes de iniciar.");
             return;
         }
-
+        controlador.iniciarJuego();
         System.out.println("Iniciando juego con los jugadores: " + controlador.getJugadores());
-        // Aquí llamás a tu lógica de inicio de partida
+        mostrarVistaJugador();
     }
 
     private void cargarPartida() {
@@ -100,6 +101,34 @@ public class VistaConsola {
         } catch (Exception e) {
             return -1;
         }
+    }
+    public void mostrarVistaJugador() {
+        System.out.println("========================================");
+        System.out.println("      VISTA DEL JUGADOR: " + nombre);
+        System.out.println("========================================");
+
+        // Obtener rol
+        String rol = controlador.getRolJugador(nombre);
+        System.out.println("Rol: " + rol.toUpperCase());
+
+        // Obtener mano
+        ArrayList<String> mano = controlador.getCartasJugador(nombre);
+
+        System.out.println("\nCartas en mano: (" + mano.size() + ")");
+        System.out.println("----------------------------------------");
+
+        if (mano.isEmpty()) {
+            System.out.println("No tiene cartas.");
+            return;
+        }
+
+        int i = 1;
+        for (String carta : mano) {
+            System.out.println(i + ". " + carta);
+            i++;
+        }
+
+        System.out.println("----------------------------------------");
     }
 
     /*

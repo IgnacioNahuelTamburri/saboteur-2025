@@ -8,14 +8,34 @@ public class Tablero {
 
     public static final int ANCHO_TABLERO = 11;
     public static final int ALTO_TABLERO = 5;
+    public static final int CANT_PEPITAS = 1;
 
     private Carta[][] tablero = new Carta[ALTO_TABLERO][ANCHO_TABLERO];
 
     public Tablero() {
         tablero[2][1] = new CartaTunel(true, true, true, true, true);
-        tablero[0][9] = new CartaPepita();
-        tablero[2][9] = new CartaPepita();
-        tablero[4][9] = new CartaPepita();
+        int[][] posiciones = {
+                {0, 9},
+                {2, 9},
+                {4, 9}
+        };
+        asignarPepitas(posiciones);
+    }
+
+    private void asignarPepitas(int [][]posiciones){
+        // Elegimos aleatoriamente cuál es la pepita real
+        int indicePepita = (int) (Math.random() * posiciones.length);
+
+        for (int i = 0; i < posiciones.length; i++) {
+            int fila = posiciones[i][0];
+            int col  = posiciones[i][1];
+
+            if (i == indicePepita) {
+                tablero[fila][col] = new CartaPepita(true);   // carta verdadera
+            } else {
+                tablero[fila][col] = new CartaPepita(false);   // destino falso
+            }
+        }
     }
 
     public void mostrarTablero() {
