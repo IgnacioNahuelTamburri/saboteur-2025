@@ -11,14 +11,30 @@ public class Juego {
     private ArrayList<Jugador> jugadores = new ArrayList<>();
     private ArrayList<Carta> mazo = new ArrayList<>();
 
-    public Juego (ArrayList <Jugador> jugadores){
-        this.jugadores = jugadores;
+    public Juego (){
+    }
+
+    public void agregarJugador (String nombre){
+        this.jugadores.add(new Jugador(nombre, this));
+    }
+
+    public void eliminarJugador (String nombre){
+        for (Jugador j: jugadores){
+            if (j.getNombre().equals(nombre)){
+                this.jugadores.remove(j);
+            }
+        }
+    }
+
+    public void iniciarJuego (){
         setRoles();
         mazo.addAll(crearCartaTunel());
         mazo.addAll(crearCartaAccion());
         Collections.shuffle(mazo);
         repartirCartas();
     }
+
+
 
     public void setRoles (){
         int cantSabo = switch (jugadores.size()) {
@@ -40,7 +56,7 @@ public class Juego {
         }
         Collections.shuffle(mineros);
         for (Jugador j:jugadores){
-            j.setTipo(mineros.removeFirst());
+            j.setRol(mineros.removeFirst().toString());
         }
     }
 
@@ -84,16 +100,16 @@ public class Juego {
     public ArrayList <Carta> crearCartaAccion (){
         ArrayList <Carta> cartas = new ArrayList<>();
         for (int i = 0; i < 3; i ++){
-            cartas.add(new CartaAccionRomper("", "pico"));
-            cartas.add(new CartaAccionRomper("", "carro"));
-            cartas.add(new CartaAccionRomper("", "lampara"));
-            cartas.add(new CartaAccionArreglar("", "pico"));
-            cartas.add(new CartaAccionArreglar("", "carro"));
-            cartas.add(new CartaAccionArreglar("", "lampara"));
-            cartas.add(new CartaAccionDerrumbe(""));
+            cartas.add(new CartaAccionRomper("romper pico", "pico"));
+            cartas.add(new CartaAccionRomper("romper carro", "carro"));
+            cartas.add(new CartaAccionRomper("romper lampara", "lampara"));
+            cartas.add(new CartaAccionArreglar("arreglar pico", "pico"));
+            cartas.add(new CartaAccionArreglar("arreglar carro", "carro"));
+            cartas.add(new CartaAccionArreglar("arreglar lampara", "lampara"));
+            cartas.add(new CartaAccionDerrumbe("derrumbe"));
         }
         for (int i = 0; i < 6; i ++){
-            cartas.add(new CartaAccionMapa(""));
+            cartas.add(new CartaAccionMapa("mapa"));
         }
         return cartas;
     }
@@ -126,4 +142,42 @@ public class Juego {
     public void mostrarTablero (){
         tablero.mostrarTablero();
     }
+
+    public int getCantJugadores (){
+        return jugadores.size();
+    }
+
+    public String getJugadores (){
+        StringBuilder nombres = new StringBuilder();
+        for (Jugador j: jugadores){
+            nombres.append(j.getNombre());
+        }
+        return nombres.toString();
+    }
+
+    public ArrayList <String> getCartasJugador (String nombre){
+        ArrayList <String> cartas = new ArrayList<>();
+        ArrayList <Carta> carta = new ArrayList<>();
+        for (Jugador j: jugadores){
+            if (j.getNombre().equals(nombre)){
+                carta.addAll(j.getCartas());
+            }
+        }
+        for (Carta c: carta){
+            cartas.add(c.toString());
+        }
+        return cartas;
+    }
+
+    public String getRolJugador (String nombre){
+        for (Jugador j: jugadores){
+            if (j.getNombre().equals(nombre)){
+                return j.mostrarRol();
+            }
+        }
+        return "No se encuentra el jugador";
+    }
+
+
+
 }

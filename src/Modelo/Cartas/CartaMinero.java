@@ -12,10 +12,10 @@ public class CartaMinero implements Carta{
     }
 
     @Override
-    public String mostrar() {
+    public String toString() {
         if (!saboteador){
-            return "Soy un minero!";
+            return "minero";
         }
-        return "Soy un saboteador!";
+        return "saboteador";
     }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Jugador {
     private Juego juego;
     private String nombre;
-    private Carta tipo;
+    private String rol;
     private Boolean pico;
     private Boolean luz;
     private Boolean carro;
@@ -25,12 +25,12 @@ public class Jugador {
         this.juego = juego;
     }
 
-    public void setTipo(Carta tipo){
-        this.tipo = tipo;
+    public void setRol(String rol){
+        this.rol = rol;
     }
 
-    public String mostrarTipo (){
-        return tipo.mostrar();
+    public String mostrarRol (){
+        return rol;
     }
 
     public String getNombre() {
@@ -81,6 +81,10 @@ public class Jugador {
 
     public void darCartas (ArrayList <Carta> cartasJugador){
         cartas.addAll(cartasJugador);
+    }
+
+    public ArrayList <Carta> getCartas(){
+        return cartas;
     }
 
     public boolean jugarCartaTunel (int indice, int fila, int col){

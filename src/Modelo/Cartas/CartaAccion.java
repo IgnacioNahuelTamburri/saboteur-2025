@@ -11,7 +11,7 @@ public abstract class CartaAccion implements Carta {
     }
 
     @Override
-    public String mostrar() {
+    public String toString() {
         return nombre;
     }
 

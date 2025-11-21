@@ -17,9 +17,14 @@ public class CartaTunel implements Carta{
     }
 
     @Override
-    public String mostrar() {
-        return "";
+    public String toString() {
+        return "N:" + norte +
+                " E:" + este +
+                " O:" + oeste +
+                " S:" + sur +
+                " C:" + centro;
     }
+
 
     public boolean isNorte() {
         return norte;

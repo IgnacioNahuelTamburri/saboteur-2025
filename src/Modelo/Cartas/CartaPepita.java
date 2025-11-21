@@ -1,9 +1,18 @@
 package Modelo.Cartas;
 
-public class CartaPepita implements Carta{
+public class CartaPepita implements Carta {
+
+    private boolean esPepita;
+
+    public CartaPepita (boolean esPepita){
+        this.esPepita = esPepita;
+    }
 
     @Override
-    public String mostrar() {
-        return "";
+    public String toString() {
+        if (esPepita){
+            return "pepita";
+        }
+        return "carbon";
     }
 }
